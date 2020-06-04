@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_header_footer">
+    <sp_header_footer action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($rootScope, $scope, snRecordWatcher, spUtil, $location, $uibModal, cabrillo, $timeout, $window) {
+    var c = this;
+
+    //SFSTRY0002096 - Changes start here - US_DAS_DP_WalkmeSnippit_SFSTRY0002096 _tbedia_05/07/2020_V1.0
+    if ($scope.portal.url_suffix == 'deliveryportal') {
+
+        var walkme = document.createElement('script');
+        walkme.type = 'text/javascript';
+        walkme.async = true;
+        if (c.data.instance_name == 'deloitteus') {
+			walkme.src = 'https://cdn.walkme.com/users/a176dbc700a540a0998ce86fa0316a69/walkme_a176dbc700a540a0998ce86fa0316a69_https.js';
+        } else {
+			walkme.src = 'https://cdn.walkme.com/users/a176dbc700a540a0998ce86fa0316a69/test/walkme_a176dbc700a540a0998ce86fa0316a69_https.js';
+        }
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(walkme, s);
+        window._walkmeConfig = {
+            smartLoad: true
+        };
+    }
+    //SFSTRY0002096 - Changes end here
+
+    $scope.refreshHome = function() {
+        window.location.href = "/" + c.data.instace;
+    };
+    $scope.userID = $scope.user.sys_id;
+    if (cabrillo.isNative())
+        $scope.isViewNative = true;
+
+    $scope.$on('sp_loading_indicator', function(e, value) {
+        $scope.loadingIndicator = value;
+    });
+
+    $scope.openPopUp = function() {
+        var url = "$chat_support.do?queueID=" + $scope.data.connect_support_queue_id;
+        var popup = window.open(url, "popup", "width=900, height=600");
+    };
+
+
+
+    $scope.showTypeAhead = function() {
+        if ((($window.location.href.indexOf('rsp_help_feedback') > -1) || ($window.location.href.indexOf('search_rsp') > -1) && ($window.location.href.indexOf('cbcrsp_help_feedback') == -1))) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+
+
+    $scope.openLogin = function() {
+        $scope.modalInstance = $uibModal.open({
+            templateUrl: 'modalLogin',
+            scope: $scope
+        });
+    };
+
+    $rootScope.$on('sp.avatar_changed', function() {
+        $scope.userID = "";
+        $timeout(function() {
+            $scope.userID = $scope.user.sys_id;
+        });
+    });
+
+    $scope.isHomepage = function() {
+        if (!$scope.page.id)
+            return true;
+
+        if ($scope.page.id == $scope.portal.homepage_dv)
+            return true;
+
+        return false;
+    };
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.header-loader{&#13;
+  margin-top: -20px !important;&#13;
+}&#13;
+.sp-loading-indicator{&#13;
+ color: #000; &#13;
+}&#13;
+.loader-custom{&#13;
+  position: absolute;&#13;
+  z-index:9;&#13;
+  width: 100%;&#13;
+  height: 100%;&#13;
+  opacity: 0.6;&#13;
+}&#13;
+.dropdown-menu-2 {&#13;
+    width:175px!important;&#13;
+  }&#13;
+&#13;
+  .dropdown-menu-2 &gt; li {&#13;
+    padding:1px;&#13;
+  }&#13;
+&#13;
+  .dropdown-menu-2 &gt; li:hover {&#13;
+    background-color:rgb(250,250,250);&#13;
+    border-radius:6px;&#13;
+    padding:1px;&#13;
+  }&#13;
+&#13;
+.menuheader {&#13;
+   font-family: "SourceSansPro", Helvetica, Arial, sans-serif;&#13;
+  font-size: 14px;&#13;
+ &#13;
+}&#13;
+&#13;
+.fa {&#13;
+  &#13;
+  font-size: 14px;&#13;
+ &#13;
+}&#13;
+.navbar {&#13;
+  transition: 250ms opacity ease-in-out; &#13;
+  -webkit-transition: 250ms opacity ease-in-out; &#13;
+  border: 0;&#13;
+  border-bottom: 4px solid $sp-navbar-divider-color; &#13;
+}&#13;
+&#13;
+#typeaheadbar-rsp {&#13;
+  float: right;&#13;
+  margin-top: 1%;&#13;
+  margin-right: -3%;&#13;
+}&#13;
+&#13;
+.navbar-fade {&#13;
+  opacity: 0.4;&#13;
+}&#13;
+&#13;
+ul {&#13;
+&#13;
+padding-left: 25px !important;&#13;
+}&#13;
+.navbar-inverse {&#13;
+  border-color: rgba(255, 255, 255, 0.25);&#13;
+  padding-left: 1.5%;&#13;
+  padding-right: 3%;&#13;
+}&#13;
+&#13;
+.nav &gt; li &gt; a {&#13;
+  max-height: 50px;&#13;
+}&#13;
+&#13;
+.navbar-brand {&#13;
+  height: 50px;&#13;
+  padding: 0;&#13;
+}&#13;
+&#13;
+.navbar-brand img, .navbar-brand span {&#13;
+  margin-left: $sp-logo-margin-x;&#13;
+  margin-right: $sp-logo-margin-x;&#13;
+  margin-top: $sp-logo-margin-y;&#13;
+  margin-bottom: $sp-logo-margin-y;&#13;
+  display: block;&#13;
+  max-height: $sp-logo-max-height;&#13;
+  max-width: $sp-logo-max-width;&#13;
+  position: relative;&#13;
+  top: 50%;&#13;
+  -webkit-transform: translateY(-50%);&#13;
+  -ms-transform: translateY(-50%);&#13;
+  transform: translateY(-50%);&#13;
+}&#13;
+&#13;
+.breadcrumb-container {&#13;
+  background-color: $panel-bg;&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
+&#13;
+&#13;
+&#13;
+/* for mobile app */&#13;
+.navbar-inverse.is-native {&#13;
+  background-color: #405060;&#13;
+}&#13;
+&#13;
+nav {&#13;
+ margin-bottom: 0px;&#13;
+ border-radius: 0px; &#13;
+}&#13;
+&#13;
+.navbar-collapse{&#13;
+padding-right: 0px;&#13;
+}&#13;
+&#13;
+.navbar-nav {&#13;
+margin: 0px;&#13;
+}&#13;
+&#13;
+.divider {&#13;
+  border-width: 2px;&#13;
+}&#13;
+&#13;
+.navbar-avatar {&#13;
+padding-left: 5px;&#13;
+padding-top:1px;  &#13;
+}&#13;
+&#13;
+.dropdown-menu { &#13;
+  padding: 10px;&#13;
+  padding-left:20px;&#13;
+}&#13;
+&#13;
+&#13;
+/*These are custom styles for announcement*/&#13;
+.rsp-alert-width-display-announce{&#13;
+  width: -18%;&#13;
+word-spacing: 17%;&#13;
+    padding-right: 1rem;&#13;
+    height: auto;&#13;
+    width: 32rem;&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
+.statusIndicator-rec-announce {&#13;
+ /* display:block;&#13;
+  width: 4px;&#13;
+  margin-top: 2%;&#13;
+  inline-size: 1%;&#13;
+  line-height: 2;&#13;
+  background-color: salmon;&#13;
+  margin-left: -6px; */&#13;
+  border-left: thick solid salmon;&#13;
+      padding-bottom: 6%;&#13;
+}&#13;
+&#13;
+.statusIndicator-rec-announce-muted{&#13;
+padding-top: 2%;&#13;
+    padding-bottom: 6%;&#13;
+}&#13;
+&#13;
+/*Custom - Alert Bell*/&#13;
+.fa-bell-o:hover{&#13;
+  color: #70b231 !important;&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {&#13;
+  #typeaheadbar-rsp { margin-top: -3%;  margin-left: 63%; } /* your css rules for ipad portrait */&#13;
+}&#13;
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape) {&#13;
+  #typeaheadbar-rsp { margin-top: -3%;  margin-left: 63%; } /* your css rules for ipad landscape */&#13;
+} &#13;
+}&#13;
+&#13;
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id/>
+        <internal>false</internal>
+        <link><![CDATA[function(scope, element) {	
+	$(element).on('click.nav','.navbar-collapse.in',function(e) {	
+		var target = $(e.target);
+		if (target.is('a')) {
+			// collapse mobile nav if clicked an anchor
+			$(this).removeClass('in').addClass('collapse');
+			return;
+		}
+
+		// if neither target nor parent is an anchor, do nothing
+		if (!target.parent().is('a'))
+			return;
+
+		// collapse mobile nav if target is part of a submenu
+		if (target.parents("ul.dropdown-menu").length > 0)
+			$(this).removeClass('in').addClass('collapse');
+	});
+}
+
+]]></link>
+        <name>Copy of Main USSP Stock Header - RSP</name>
+        <option_schema/>
+        <public>true</public>
+        <roles/>
+        <script><![CDATA[// Defines the support queue ID that will be linked to by the Live Chat link in header
+data.connect_support_queue_id = $sp.getValue('sp_chat_queue');
+data.login_page = $sp.getValue('login_page');
+var menu = $sp.getValue("sp_rectangle_menu");
+data.instace=$sp.getDisplayValue("url_suffix");
+data.menu = $sp.getWidgetFromInstance(menu);
+if (data.menu && data.menu.data) {
+	data.menu.data.replace = true;
+	// Hide login if menu already has link to login
+	data.hasLogin = false;
+	if (data.menu.data.menu.items) {
+		for(var i in data.menu.data.menu.items) {
+			var item = data.menu.data.menu.items[i];
+			if (item.type == 'page' && item.sp_page == data.login_page)
+				data.hasLogin = true;
+		}
+	}
+}
+
+data.loginWidget = $sp.getWidgetFromInstance('login-modal');
+//data.typeahead = //$sp.getWidgetFromInstance('typeahead-search');
+			data.typeahead = $sp.getWidget('va-typeahead-search-header');
+
+
+
+var gr = new GlideRecord('sys_user');
+gr.addQuery('sys_id', gs.getUserID());
+gr.query();
+if(gr.next())
+{
+	data.title = gr.u_job_title_name.getDisplayValue();	
+}
+
+
+//custom change - to fetch records from Announcement table
+var items =[];
+var cur_dt = new GlideDateTime();
+var inc_rec = new GlideRecord('announcement');
+inc_rec.addActiveQuery();
+inc_rec.orderByDesc('sys_updated_on');
+inc_rec.setLimit(5);
+inc_rec.query();
+
+while(inc_rec.next()){
+	
+	var from_date  = new GlideDateTime(inc_rec.from);
+    var to_date  = new GlideDateTime(inc_rec.to);
+    if(from_date.getNumericValue()<cur_dt.getNumericValue()  && to_date.getNumericValue()>cur_dt.getNumericValue()){
+	
+	var inc_data = {};
+	inc_data.name = inc_rec.name.getDisplayValue();
+	
+	var i;	
+// 		 if((inc_data.name).indexOf(' ')){
+		
+// 			index = (inc_data.name).indexOf(' ');
+// 			inc_data.name = (inc_data.name).substring(0,index) + "..";
+		
+// 		 }
+		
+	if((inc_data.name).length > 16)
+	inc_data.name = (inc_data.name).substring(0,20) + "..";
+	
+	
+	inc_data.title = inc_rec.title.getDisplayValue();
+	if((inc_data.title).length > 16)
+	inc_data.title = (inc_data.title).substring(0,16) + "..";
+	
+	inc_data.title_sec = inc_data.title;	
+	inc_data.updated = inc_rec.sys_updated_on.getDisplayValue();
+	inc_data.sysId = inc_rec.sys_id.getDisplayValue();
+	items.push(inc_data);
+	}
+}
+data.items=items;
+
+//SFSTRY0002096 - Changes start here - US_DAS_DP_WalkmeSnippit_SFSTRY0002096 _tbedia_05/07/2020_V1.0
+data.instance_name = gs.getProperty('instance_name').toString();
+//SFSTRY0002096 - Changes end here]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_header_footer</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2020-06-03 11:32:11</sys_created_on>
+        <sys_id>8d158fabdb019010cad88a1848961993</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Copy of Main USSP Stock Header - RSP</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sp_header_footer_8d158fabdb019010cad88a1848961993</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2020-06-03 11:32:28</sys_updated_on>
+        <template><![CDATA[<div>
+  <div class="header-loader" ng-show="loadingIndicator"> 
+    <div class="loader-custom hidden-xs sp-loading-indicator la-sm"> 
+      <img src="fullPageLoader.gif" style="width:100%;height:100%"/>
+    </div> 
+  </div>
+  <nav class="navbar-inverse" ng-class="::{'navbar':!isViewNative, 'is-native': isViewNative}"
+       role="navigation">
+    <div ng-show="::!isViewNative" class="navbar-header">
+      <a class="navbar-brand" ng-if="::!portal.logo" href="?id={{::portal.homepage_dv}}"><span>{{::portal.title}}</span></a>
+      <a class="navbar-brand navbar-brand-logo" ng-if="::portal.logo" href="?id={{::portal.homepage_dv}}">
+        <img ng-src="{{::portal.logo}}" />
+      </a>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sp-nav-bar">
+        <span class="sr-only">${Toggle navigation}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div sp-navbar-toggle="" class="collapse navbar-collapse navbar-left" id="sp-nav-bar">
+      <!-- Include The Menu -->
+      <sp-widget widget="data.menu"></sp-widget>
+      <ul ng-if="::(!user.logged_in && page.id != portal.login_page_dv && !data.hasLogin)" class="nav navbar-nav">
+        <li><a href ng-click="openLogin()">${Login}</a></li>
+      </ul>
+    </div>
+
+
+
+    <div class="collapse navbar-collapse navbar-right" id="sp-id-bar">
+
+
+
+
+      <ul ng-if="::user.logged_in" class="nav navbar-nav" style="float:left;">
+        <!--custom changes for Announcements dropdown-->   
+         <ul  ng-if="::user.logged_in" class="nav navbar-nav" style="margin-top:0px;float:left;">
+           <li><a href="javascript:void(0)" ng-click="refreshHome()">
+            	<i><img src="home_icon1.png" height="22" width="22" style="margin-top:0px;display:inline;"/></i>
+            </a>
+           </li>
+           
+           <li>
+        
+          <a href="javascript:void(0)"  class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o" style="font-size:20px; margin-left: 115%;"></i></a>
+          <!--   <ul class="dropdown-menu">-->
+          <ul class="dropdown-menu ng-scope ng-isolate-scope rsp-alert-width-display-announce">
+          <div ng-snow="data.items.length > 0" > 
+            <li ng-repeat="item in data.items"> <!--style="min-width: 20em;"-->
+              <!-- <span class="statusIndicator-rec-inc"></span>-->
+
+              <a class="ng-scope" role="link" href="?id=announcements&amp;table=announcement&amp;sys_id={{::item.sysId}}">
+                <span class="ng-binding statusIndicator-rec-announce">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{::item.name}}</span>
+                <span class="block color-primary text-muted ng-binding statusIndicator-rec-announce-muted"> 
+                  <span class="block" style="float:right;">
+                    <sn-time-ago timestamp="::item.updated"/></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{::item.title_sec}}</span>
+              </a>
+            </li>
+            </div>
+             <div ng-if="data.items.length == 0" >
+           
+
+              
+                <span >No Alerts</span>
+              
+            
+            </div>
+            
+          </ul>
+        </li>
+           </ul>
+      </ul>
+      <!--custom changes end here -->
+
+      <ul ng-if="::user.logged_in" class="nav navbar-nav">
+        <!-- chat, avatar, and logout -->
+        <li ng-if="::data.connect_support_queue_id"><a href ng-click="openPopUp()">${Live Chat}</a></li>
+        <li class="dropdown hidden-xs">
+          <a href="javascript:void(0)" class="dropdown-toggle" style="background-color:transparent;" data-toggle="dropdown">
+            <span class="navbar-avatar"><sn-avatar class="avatar-small-medium" primary="userID" /></span>
+            <span class="visible-lg-inline">{{::user.name}}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-2">
+            <!-- <span class="navbar-avatar">  <sn-avatar class="avatar-small-medium" primary="userID" /></span> <li role="presentation">{{::user.name}} <br> {{data.title}}</li> Removing the role  -->
+            <li><i class="fa fa-gear" style="margin-left:2px"><span class="menuheader"> &nbsp; &nbsp; <a style="format:none;" ng-href="?id=user_profile&sys_id={{::user.sys_id}}">${Profile}</a></span></i> </li>
+            <li role="presentation"> <i class ="fa fa-commenting-o"><span class="menuheader"> &nbsp; &nbsp; <a ng-href="?id=rsp_help_feedback" role="menuitem">${Send Feedback}</a></span> </i></li>
+            <li class="divider"></li>
+            <li> <i class="fa fa-sign-in"><span class="menuheader"> &nbsp; &nbsp; <a href="{{::portal.logoutUrl}}">&nbsp;${Logout}</a></span></i></li>
+          </ul>
+        </li>
+        <li class="visible-xs-block"><a ng-href="?id=user_profile&sys_id={{::user.sys_id}}"><span class="navbar-avatar"><sn-avatar class="avatar-small-medium" primary="userID" /></span>{{::user.name}}</a></li>
+        <li class="visible-xs-block"><a href="{{::portal.logoutUrl}}">&nbsp;${Logout}</a></li>
+        
+      </ul>
+    </div>
+
+  
+<div id="typeaheadbar-rsp" class="col-md-3" ng-show="showTypeAhead()">
+      <sp-widget widget="data.typeahead"></sp-widget>
+    </div>
+
+  </nav>  
+</div>]]></template>
+    </sp_header_footer>
+</record_update>
